@@ -12,7 +12,7 @@ using SportsEventManager.Data;
 namespace SportsEventManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240827013016_InitialCreate")]
+    [Migration("20240827030033_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

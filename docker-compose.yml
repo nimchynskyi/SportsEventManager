@@ -1,0 +1,6 @@
+﻿services:
+  sportseventmanager:
+    image: sportseventmanager
+    build:
+      context: .
+      dockerfile: SportsEventManager/Dockerfile

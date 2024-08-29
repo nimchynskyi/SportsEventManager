@@ -10,10 +10,10 @@ public class Player
     public DateOnly? DateOfBirth { get; set; }
 
     public string Position { get; set; }
-    // public int? TeamId { get; set; }
+    public int? TeamId { get; set; }
 
     public virtual ApplicationUser User { get; set; }
-    // public virtual Team Team { get; set; }
+    public virtual Team Team { get; set; }
 
     public string Biography { get; set; }
     public bool IsActive { get; set; }

@@ -14,6 +14,7 @@ public class Player
 
     public virtual ApplicationUser User { get; set; }
     public virtual Team Team { get; set; }
+    public ICollection<EventPlayer> EventPlayers { get; set; }
 
     public string Biography { get; set; }
     public bool IsActive { get; set; }

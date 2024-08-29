@@ -25,4 +25,5 @@ public class Event
     [ForeignKey("LocationId")] public virtual Venue Location { get; set; }
     public virtual ICollection<Team> Teams { get; set; }
     public virtual ICollection<Player> Players { get; set; }
+    public virtual ICollection<EventPlayer> EventPlayers { get; set; }
 }

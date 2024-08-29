@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SportsEventManager.Data;
@@ -11,9 +12,11 @@ using SportsEventManager.Data;
 namespace SportsEventManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240829035409_EnhanceEventAndTeamModel")]
+    partial class EnhanceEventAndTeamModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,27 +292,6 @@ namespace SportsEventManager.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("SportsEventManager.Models.EventPlayer", b =>
-                {
-                    b.Property<int>("EventId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Rank")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal?>("Score")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("EventId", "PlayerId");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("EventPlayers");
-                });
-
             modelBuilder.Entity("SportsEventManager.Models.Player", b =>
                 {
                     b.Property<int>("Id")
@@ -480,25 +462,6 @@ namespace SportsEventManager.Migrations
                     b.Navigation("Organizer");
                 });
 
-            modelBuilder.Entity("SportsEventManager.Models.EventPlayer", b =>
-                {
-                    b.HasOne("SportsEventManager.Models.Event", "Event")
-                        .WithMany("EventPlayers")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SportsEventManager.Models.Player", "Player")
-                        .WithMany("EventPlayers")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Player");
-                });
-
             modelBuilder.Entity("SportsEventManager.Models.Player", b =>
                 {
                     b.HasOne("SportsEventManager.Models.Event", null)
@@ -537,16 +500,9 @@ namespace SportsEventManager.Migrations
 
             modelBuilder.Entity("SportsEventManager.Models.Event", b =>
                 {
-                    b.Navigation("EventPlayers");
-
                     b.Navigation("Players");
 
                     b.Navigation("Teams");
-                });
-
-            modelBuilder.Entity("SportsEventManager.Models.Player", b =>
-                {
-                    b.Navigation("EventPlayers");
                 });
 
             modelBuilder.Entity("SportsEventManager.Models.Team", b =>

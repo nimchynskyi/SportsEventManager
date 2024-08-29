@@ -19,9 +19,8 @@
         <DataAnnotationsValidator/>
 
         <div class="mb-4">
-            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-            <InputText @bind-Value="Input.UserName" id="user-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter your username"/>
-            <ValidationMessage For="() => Input.UserName" class="text-red-500"/>
+            <label for="username" class="block text-sm font-medium text-gray-700">Your username:</label>
+            <input type="text" value="@username" class="block text-sm font-medium text-gray-700" placeholder="Please choose your username." disabled/>
         </div>
 
         <div class="flex-1 mb-4">

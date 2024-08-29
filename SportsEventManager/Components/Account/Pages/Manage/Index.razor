@@ -24,6 +24,18 @@
             <ValidationMessage For="() => Input.UserName" class="text-red-500"/>
         </div>
 
+        <div class="flex-1 mb-4">
+            <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
+            <InputText @bind-Value="Input.FirstName" id="first-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter your first name"/>
+            <ValidationMessage For="() => Input.FirstName" class="text-red-500"/>
+        </div>
+
+        <div class="flex-1 mb-4">
+            <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
+            <InputText @bind-Value="Input.LastName" id="last-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter your last name"/>
+            <ValidationMessage For="() => Input.LastName" class="text-red-500"/>
+        </div>
+
         <div class="flex gap-4">
             <div class="flex-1 mb-4">
                 <label for="phone-number" class="block text-sm font-medium text-gray-700">Phone number</label>
@@ -48,6 +60,8 @@
     private ApplicationUser user = default!;
     private string? username;
     private string? phoneNumber;
+    private string? firstName;
+    private string? lastName;
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
     [SupplyParameterFromForm] private InputModel Input { get; set; } = new();
@@ -58,7 +72,10 @@
         username = await UserManager.GetUserNameAsync(user);
         phoneNumber = await UserManager.GetPhoneNumberAsync(user);
 
+
         Input.UserName ??= username;
+        Input.FirstName ??= user.FirstName ?? "";
+        Input.LastName ??= user.LastName ?? "";
         Input.PhoneNumber ??= phoneNumber;
         Input.DateOfBirth ??= user.DateOfBirth ?? new DateOnly(1970, 1, 1);
     }
@@ -66,6 +83,8 @@
     private async Task OnValidSubmitAsync()
     {
         user.UserName = Input.UserName;
+        user.FirstName = Input.FirstName;
+        user.LastName = Input.LastName;
         user.PhoneNumber = Input.PhoneNumber;
         user.DateOfBirth = Input.DateOfBirth;
         var updateResult = await UserManager.UpdateAsync(user);
@@ -81,6 +100,9 @@
     private sealed class InputModel
     {
         public string? UserName { get; set; }
+
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
 
         [Phone]
         [Display(Name = "Phone number")]

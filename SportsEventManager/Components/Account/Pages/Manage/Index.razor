@@ -25,6 +25,16 @@
         </div>
 
         <div class="flex-1 mb-4">
+            <div class="block text-sm font-medium text-gray-700">Your roles:</div>
+            <div class="flex flex-wrap gap-2 mt-2">
+                @foreach (var role in roles)
+                {
+                    <span class="flex flex-row bg-gray-200 hover:bg-gray-400 shadow-md rounded-md px-2 py-0.5 mr-2">@role</span>
+                }
+            </div>
+        </div>
+
+        <div class="flex-1 mb-4">
             <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
             <InputText @bind-Value="Input.FirstName" id="first-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter your first name"/>
             <ValidationMessage For="() => Input.FirstName" class="text-red-500"/>
@@ -62,6 +72,7 @@
     private string? phoneNumber;
     private string? firstName;
     private string? lastName;
+    private List<string> roles = new List<string>();
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
     [SupplyParameterFromForm] private InputModel Input { get; set; } = new();
@@ -72,6 +83,7 @@
         username = await UserManager.GetUserNameAsync(user);
         phoneNumber = await UserManager.GetPhoneNumberAsync(user);
 
+        GetUserRoles();
 
         Input.UserName ??= username;
         Input.FirstName ??= user.FirstName ?? "";
@@ -109,6 +121,14 @@
         public string? PhoneNumber { get; set; }
 
         public DateOnly? DateOfBirth { get; set; }
+    }
+
+    private void GetUserRoles()
+    {
+        roles = new List<string>();
+        if (user.IsPlayer) roles.Add("Player");
+        if (user.IsCoach) roles.Add("Coach");
+        if (user.IsOrganizer) roles.Add("Organizer");
     }
 
 }

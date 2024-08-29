@@ -19,6 +19,10 @@ public class Event
     public int AttendeeCount { get; set; }
 
     public string OrganizerId { get; set; }
+    public int? LocationId { get; set; }
 
     [ForeignKey("OrganizerId")] public virtual ApplicationUser Organizer { get; set; }
+    [ForeignKey("LocationId")] public virtual Venue Location { get; set; }
+    public virtual ICollection<Team> Teams { get; set; }
+    public virtual ICollection<Player> Players { get; set; }
 }

@@ -10,33 +10,38 @@
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Profile</PageTitle>
+<h3 class="text-xl font-semibold text-gray-900">Profile</h3>
 
-<h3>Profile</h3>
 <StatusMessage/>
 
-<div class="row">
-    <div class="col-md-6">
-        <EditForm Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync" method="post">
-            <DataAnnotationsValidator/>
-            <ValidationSummary class="text-danger" role="alert"/>
-            <div class="form-floating mb-3">
-                <input type="text" value="@username" class="form-control" placeholder="Please choose your username." disabled/>
-                <label for="username" class="form-label">Username</label>
+<div class="mt-4">
+    <EditForm Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync" method="post">
+        <DataAnnotationsValidator/>
+
+        <div class="mb-4">
+            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+            <InputText @bind-Value="Input.UserName" id="user-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter your username"/>
+            <ValidationMessage For="() => Input.UserName" class="text-red-500"/>
+        </div>
+
+        <div class="flex gap-4">
+            <div class="flex-1 mb-4">
+                <label for="phone-number" class="block text-sm font-medium text-gray-700">Phone number</label>
+                <InputText @bind-Value="Input.PhoneNumber" id="phone-number" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter your phone number"/>
+                <ValidationMessage For="() => Input.PhoneNumber" class="text-red-500"/>
             </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
-                <label for="phone-number" class="form-label">Phone number</label>
-                <ValidationMessage For="() => Input.PhoneNumber" class="text-danger"/>
+
+            <div class="flex-1 mb-6">
+                <label for="date-of-birth" class="block text-sm font-medium text-gray-700">Date of birth</label>
+                <InputDate @bind-Value="Input.DateOfBirth" id="date-of-birth" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
+                <ValidationMessage For="() => Input.DateOfBirth" class="text-red-500"/>
             </div>
-            <div class="form-floating mb-3">
-                <InputDate @bind-Value="Input.DateOfBirth" class="form-control" />
-                <label for="date-of-birth" class="form-label">Date of birth</label>
-                <ValidationMessage For="() => Input.DateOfBirth" class="text-danger"/>
-            </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </EditForm>
-    </div>
+        </div>
+
+        <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Save
+        </button>
+    </EditForm>
 </div>
 
 @code {
@@ -53,27 +58,30 @@
         username = await UserManager.GetUserNameAsync(user);
         phoneNumber = await UserManager.GetPhoneNumberAsync(user);
 
+        Input.UserName ??= username;
         Input.PhoneNumber ??= phoneNumber;
         Input.DateOfBirth ??= user.DateOfBirth ?? new DateOnly(1970, 1, 1);
     }
 
     private async Task OnValidSubmitAsync()
     {
-
-        user.PhoneNumber = Input.PhoneNumber;                   
+        user.UserName = Input.UserName;
+        user.PhoneNumber = Input.PhoneNumber;
         user.DateOfBirth = Input.DateOfBirth;
         var updateResult = await UserManager.UpdateAsync(user);
         if (!updateResult.Succeeded)
         {
             RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to update the user.", HttpContext);
         }
-        
+
         await SignInManager.RefreshSignInAsync(user);
         RedirectManager.RedirectToCurrentPageWithStatus("Your profile has been updated", HttpContext);
     }
 
     private sealed class InputModel
     {
+        public string? UserName { get; set; }
+
         [Phone]
         [Display(Name = "Phone number")]
         public string? PhoneNumber { get; set; }

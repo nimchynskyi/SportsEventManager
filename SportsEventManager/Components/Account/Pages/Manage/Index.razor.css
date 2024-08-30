@@ -1,0 +1,7 @@
+.role-tag {
+    transition: transform 0.2s;
+}
+
+.role-tag:hover {
+    transform: scale(1.2);
+}

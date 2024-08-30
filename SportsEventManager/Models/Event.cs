@@ -26,4 +26,12 @@ public class Event
     public virtual ICollection<Team> Teams { get; set; }
     public virtual ICollection<Player> Players { get; set; }
     public virtual ICollection<EventPlayer> EventPlayers { get; set; }
+    public virtual ICollection<EventTeam> EventTeams { get; set; }
+
+    public Event()
+    {
+        // to prevent null references
+        EventPlayers = new HashSet<EventPlayer>();
+        EventTeams = new HashSet<EventTeam>();
+    }
 }

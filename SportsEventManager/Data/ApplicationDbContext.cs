@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Team> Teams { get; set; }
     public DbSet<Venue> Venues { get; set; }
     public DbSet<EventPlayer> EventPlayers { get; set; }
+    public DbSet<EventTeam> EventTeams { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,5 +34,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(ep => ep.Player)
             .WithMany(p => p.EventPlayers)
             .HasForeignKey(ep => ep.PlayerId);
+
+        modelBuilder.Entity<EventTeam>()
+            .HasKey(et => new { et.EventId, et.TeamId });
+
+        modelBuilder.Entity<EventTeam>()
+            .HasOne(et => et.Event)
+            .WithMany(e => e.EventTeams)
+            .HasForeignKey(et => et.EventId);
+
+        modelBuilder.Entity<EventTeam>()
+            .HasOne(et => et.Team)
+            .WithMany(t => t.EventTeams)
+            .HasForeignKey(et => et.TeamId);
     }
 }

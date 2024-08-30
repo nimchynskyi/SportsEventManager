@@ -11,4 +11,12 @@ public class Team
 
     public virtual ApplicationUser Coach { get; set; }
     public virtual ICollection<Player> Players { get; set; }
+
+    public virtual ICollection<EventTeam> EventTeams { get; set; }
+
+    public Team()
+    {
+        // to prevent null references
+        EventTeams = new HashSet<EventTeam>();
+    }
 }
